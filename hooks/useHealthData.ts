@@ -1,7 +1,6 @@
-
 import { useState, useEffect, useCallback } from 'react';
-import { HealthRecord } from '../types';
-import { generateDummyData } from '../utils/healthUtils';
+import { HealthRecord } from '../types.ts';
+import { generateDummyData } from '../utils/healthUtils.ts';
 
 const STORAGE_KEY = 'healthData';
 

@@ -1,5 +1,5 @@
-import { HealthStatus, HealthRecord } from '../types';
-import { THRESHOLDS } from '../constants';
+import { HealthStatus, HealthRecord } from '../types.ts';
+import { THRESHOLDS } from '../constants.ts';
 
 export const formatDate = (dateString: string) => {
   const [year, month, day] = dateString.split('-');

@@ -1,9 +1,8 @@
-
 import React, { useState, useMemo } from 'react';
-import { HealthRecord, HealthStatus } from '../types';
-import { useHealthData } from '../hooks/useHealthData';
-import { formatDate, calculateBMI, getStatus, getStatusColor } from '../utils/healthUtils';
-import { EditIcon, DeleteIcon, AddIcon, PrintIcon } from './Icons';
+import { HealthRecord, HealthStatus } from '../types.ts';
+import { useHealthData } from '../hooks/useHealthData.ts';
+import { formatDate, calculateBMI, getStatus, getStatusColor } from '../utils/healthUtils.ts';
+import { EditIcon, DeleteIcon, AddIcon, PrintIcon } from './Icons.tsx';
 
 interface DashboardProps {
     onLogout: () => void;
