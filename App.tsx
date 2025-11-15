@@ -3,29 +3,35 @@ import Login from './components/Login.tsx';
 import Dashboard from './components/Dashboard.tsx';
 
 const AUTH_KEY = 'isLoggedIn';
+const USER_EMAIL_KEY = 'userEmail';
 
 const App: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [userEmail, setUserEmail] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const loggedInStatus = localStorage.getItem(AUTH_KEY);
-    if (loggedInStatus === 'true') {
+    const storedEmail = localStorage.getItem(USER_EMAIL_KEY);
+    if (loggedInStatus === 'true' && storedEmail) {
       setIsLoggedIn(true);
+      setUserEmail(storedEmail);
     }
     setIsLoading(false);
   }, []);
 
   const handleLogin = (email: string) => {
     localStorage.setItem(AUTH_KEY, 'true');
-    localStorage.setItem('userEmail', email);
+    localStorage.setItem(USER_EMAIL_KEY, email);
     setIsLoggedIn(true);
+    setUserEmail(email);
   };
 
   const handleLogout = () => {
     localStorage.removeItem(AUTH_KEY);
-    localStorage.removeItem('userEmail');
+    localStorage.removeItem(USER_EMAIL_KEY);
     setIsLoggedIn(false);
+    setUserEmail('');
   };
 
   if (isLoading) {
@@ -34,7 +40,7 @@ const App: React.FC = () => {
 
   return (
     <>
-      {isLoggedIn ? <Dashboard onLogout={handleLogout} /> : <Login onLogin={handleLogin} />}
+      {isLoggedIn ? <Dashboard onLogout={handleLogout} userEmail={userEmail} /> : <Login onLogin={handleLogin} />}
     </>
   );
 };
