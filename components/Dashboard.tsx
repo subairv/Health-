@@ -7,7 +7,7 @@ import RecordFormModal from './RecordFormModal.tsx';
 
 interface DashboardProps {
     onLogout: () => void;
-    userEmail: string;
+    userName: string;
 }
 
 const StatCard: React.FC<{ title: string; value: string; status?: HealthStatus }> = ({ title, value, status }) => (
@@ -17,7 +17,7 @@ const StatCard: React.FC<{ title: string; value: string; status?: HealthStatus }
     </div>
 );
 
-const Dashboard: React.FC<DashboardProps> = ({ onLogout, userEmail }) => {
+const Dashboard: React.FC<DashboardProps> = ({ onLogout, userName }) => {
     const { records, addRecord, updateRecord, deleteRecord, loading } = useHealthData();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [recordToEdit, setRecordToEdit] = useState<HealthRecord | null>(null);
@@ -59,7 +59,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout, userEmail }) => {
                 <header className="flex justify-between items-center mb-6 no-print">
                     <h1 className="text-3xl font-bold text-white">VitalTrack AI</h1>
                     <div className="flex items-center gap-4">
-                        <p className="hidden sm:block text-slate-400">Welcome, {userEmail}</p>
+                        <p className="hidden sm:block text-slate-400">Welcome, {userName}</p>
                         <button
                             onClick={onLogout}
                             className="flex items-center bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition duration-200"
@@ -113,7 +113,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout, userEmail }) => {
                     </div>
 
                     <div id="print-area">
-                        <h2 className="text-2xl font-bold text-center mb-4 hidden print:block">Health Report for {userEmail}</h2>
+                        <h2 className="text-2xl font-bold text-center mb-4 hidden print:block">Health Report for {userName}</h2>
                         <div className="overflow-x-auto">
                             <table className="w-full text-sm text-left text-slate-400">
                                 <thead className="text-xs text-slate-300 uppercase bg-slate-700">
