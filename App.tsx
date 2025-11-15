@@ -4,11 +4,26 @@ import { auth } from './firebase.ts';
 import Login from './components/Login.tsx';
 import Dashboard from './components/Dashboard.tsx';
 
+// Set to true to bypass Firebase authentication for local development.
+// This is a workaround for the `auth/unauthorized-domain` error that can occur
+// when the development domain isn't whitelisted in the Firebase project.
+const DEV_MODE = true;
+
 const App: React.FC = () => {
-  const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  // In DEV_MODE, we create a mock user object and skip the Firebase auth flow.
+  // Otherwise, we initialize user to null and let Firebase handle it.
+  const [user, setUser] = useState<User | null>(
+    DEV_MODE ? ({ displayName: 'Dev User', email: 'dev@example.com' } as User) : null
+  );
+  // We're not loading if we are in dev mode.
+  const [isLoading, setIsLoading] = useState<boolean>(!DEV_MODE);
 
   useEffect(() => {
+    // If in development mode, we don't need to listen for auth state changes.
+    if (DEV_MODE) {
+      return;
+    }
+
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       setIsLoading(false);
@@ -19,6 +34,10 @@ const App: React.FC = () => {
   }, []);
 
   const handleLogout = () => {
+    if (DEV_MODE) {
+      alert("Logout is disabled in development mode.");
+      return;
+    }
     signOut(auth).catch(error => console.error("Logout failed:", error));
   };
 
