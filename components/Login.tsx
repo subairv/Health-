@@ -1,18 +1,27 @@
 
-import React from 'react';
+
+import React, { useState } from 'react';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { auth } from '../firebase.ts';
 import { GoogleIcon } from './Icons.tsx';
 
 
 const Login: React.FC = () => {
+  const [error, setError] = useState<string | null>(null);
 
   const handleGoogleSignIn = async () => {
+    setError(null); // Clear previous errors
     const provider = new GoogleAuthProvider();
     try {
       await signInWithPopup(auth, provider);
-    } catch (error) {
-      console.error("Error during Google sign-in:", error);
+    } catch (err: any) {
+      console.error("Error during Google sign-in:", err);
+      if (err.code === 'auth/unauthorized-domain') {
+          const domain = window.location.hostname;
+          setError(`This app's domain (${domain}) is not authorized. Please go to your Firebase project's Authentication settings and add "${domain}" to the list of Authorized Domains.`);
+      } else {
+          setError("An unexpected error occurred during sign-in. Please try again.");
+      }
     }
   };
 
@@ -27,6 +36,14 @@ const Login: React.FC = () => {
             Sign in with your Google account to continue
           </p>
         </div>
+        
+        {error && (
+            <div className="bg-red-900/50 border border-red-500 text-red-300 px-4 py-3 rounded-lg" role="alert">
+                <p className="font-bold">Authentication Help:</p>
+                <p className="text-sm">{error}</p>
+            </div>
+        )}
+
         <div className="mt-8">
             <button
               onClick={handleGoogleSignIn}
